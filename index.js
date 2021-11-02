@@ -1,0 +1,57 @@
+const { createServer } = require("http")
+const { parse } = require("url")
+const next = require("next")
+const axios = require("axios")
+const getPort = require("get-port")
+
+async function getServerFixture(t) {
+  const app = next({
+    dev: true,
+  })
+  const handle = app.getRequestHandler()
+  const port = await getPort()
+
+  let server
+  await app.prepare().then(() => {
+    server = createServer((req, res) => {
+      const parsedUrl = parse(req.url || "/", true)
+      handle(req, res, parsedUrl)
+    })
+    server.listen(port)
+  })
+
+  t.teardown(() => {
+    if (server) server.close()
+  })
+
+  const serverURL = `http://127.0.0.1:${port}`
+
+  const customAxios = axios.create({
+    baseURL: serverURL,
+  })
+
+  // Simplify axios errors
+  customAxios.interceptors.response.use(
+    (res) => res,
+    (err) =>
+      err.request && err.response
+        ? Promise.reject({
+            url: err.request.path,
+            status: err.response.status,
+            statusText: err.response.statusText,
+            response: err.response.data,
+            headers: err.response.headers,
+          })
+        : Promise.reject(err)
+  )
+
+  return {
+    port,
+    serverURL,
+    axios: customAxios,
+  }
+}
+
+module.exports = getServerFixture
+module.exports.getServerFixture = getServerFixture
+module.exports.default = getServerFixture
