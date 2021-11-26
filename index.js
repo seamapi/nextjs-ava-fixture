@@ -3,20 +3,22 @@ const { parse } = require("url")
 const next = require("next")
 const axios = require("axios")
 const getPort = require("get-port")
+const wrappers = require("@seamapi/wrappers")
 
-async function getServerFixture(t) {
+async function getServerFixture(t, options = {}) {
   const app = next({
     dev: true,
   })
   const handle = app.getRequestHandler()
   const port = await getPort()
 
+  if (!options.middlewares) options.middlewares = []
+
   let server
   await app.prepare().then(() => {
-    server = createServer((req, res) => {
-      const parsedUrl = parse(req.url || "/", true)
-      handle(req, res, parsedUrl)
-    })
+    server = createServer(
+      wrappers(...options.middlewares, handle)
+    )
     server.listen(port)
   })
 
