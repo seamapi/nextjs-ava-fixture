@@ -23,3 +23,29 @@ test("api endpoint", async (t) => {
   t.deepEqual(res, { name: "John Doe" })
 })
 ```
+
+### Usage with Middleware
+
+```ts
+// get-test-server.ts
+import { createDb } from "lib/db"
+import getFixture from "nextjs-ava-fixture"
+
+export default async (t) => {
+  const db = await createDb()
+
+  const sharedDbMw = (next) => (req, res) => {
+    req.db = db
+    return next(req, res)
+  }
+
+  const fixture = await getFixture(t, {
+    middlewares: [sharedDbMw],
+  })
+
+  return {
+    ...fixture,
+    db,
+  }
+}
+```
