@@ -49,6 +49,11 @@ async function getServerFixture(t, options = {}) {
     port,
     serverURL,
     axios: customAxios,
+    close: () => {
+      if (server) {
+        server.close()
+      }
+    }
   }
 }
 
