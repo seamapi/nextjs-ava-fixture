@@ -9,6 +9,7 @@ async function getServerFixture(t, options = {}) {
   const app = next({
     dev: options.dev === undefined ? true : options.dev,
     quiet: options.quiet,
+    dir: options.dir,
   })
   const handle = app.getRequestHandler()
   const port = await getPort()
