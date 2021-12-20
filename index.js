@@ -8,6 +8,7 @@ const { wrappers } = require("@seamapi/wrappers")
 async function getServerFixture(t, options = {}) {
   const app = next({
     dev: options.dev === undefined ? true : options.dev,
+    quiet: options.quiet,
   })
   const handle = app.getRequestHandler()
   const port = await getPort()
@@ -53,7 +54,7 @@ async function getServerFixture(t, options = {}) {
       if (server) {
         server.close()
       }
-    }
+    },
   }
 }
 
