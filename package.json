@@ -7,7 +7,7 @@
     "format": "prettier -w ."
   },
   "dependencies": {
-    "@seamapi/wrappers": "^1.0.1",
+    "@seamapi/wrappers": "^1.1.0",
     "axios": "^0.24.0",
     "get-port": "5",
     "next": "^12.0.4",
