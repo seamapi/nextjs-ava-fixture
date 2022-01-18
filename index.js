@@ -22,9 +22,14 @@ async function getServerFixture(t, options = {}) {
     server.listen(port)
   })
 
-  t.teardown(() => {
+  const teardownFn = () => {
     if (server) server.close()
-  })
+  }
+
+  const shouldTeardown = options.teardown ?? true
+  if (shouldTeardown) {
+    t.teardown(teardownFn)
+  }
 
   const serverURL = `http://127.0.0.1:${port}`
 
@@ -56,6 +61,7 @@ async function getServerFixture(t, options = {}) {
         server.close()
       }
     },
+    teardown: teardownFn,
   }
 }
 
