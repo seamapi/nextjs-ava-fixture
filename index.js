@@ -3,7 +3,7 @@ const { parse } = require("url")
 const next = require("next")
 const axios = require("axios")
 const getPort = require("get-port")
-const { wrappers } = require("@seamapi/wrappers")
+const { wrappers } = require("nextjs-middleware-wrappers")
 
 async function getServerFixture(t, options = {}) {
   const app = next({
