@@ -4,6 +4,9 @@ This package sets up a testing fixture for NextJS applications.
 
 It's great for testing API endpoints.
 
+For more speed, you might want to use [nextjs-server-modules](https://github.com/seamapi/nextjs-server-modules) which
+have a faster compilation process.
+
 ## Installation
 
 ```sh
@@ -49,13 +52,3 @@ export default async (t) => {
   }
 }
 ```
-
-## FAQ / Common Issues
-
-### You need to rebuild nsm if you change a frontend page (a non-api route) or introduce a new route
-
-You might see an error like this while running tests:
-
-![image](https://user-images.githubusercontent.com/1910070/148661231-bfb12f6e-5a1c-4a3c-bff9-5d3d818656e0.png)
-
-`nsm build` goes through your files and builds a `routes.ts` index, if it's up to date the file will be missing.
